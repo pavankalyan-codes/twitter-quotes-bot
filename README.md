@@ -4,7 +4,7 @@ An automated bot🤖 that posts Inspirational quotes 2 times a day in your Twitt
 
 ## Motivation behind
 
-When we scroll through our Twitter timeline we get inspired by some of the tweets we see. but we don't find that kind of tweets often. This situation gave birth to this bot. where it keeps motivating us by posting random inspirational quotes daily at 11:11 AM and 11:PM (All the times were in IST).
+When we scroll through our Twitter timeline we get inspired by some of the tweets we see. but we don't find that kind of tweets often. This situation gave birth to this bot. where it keeps motivating us by posting random inspirational quotes daily at 11:11 AM and 11:11PM (All the times were in IST).
 
 ```bash
 pip install foobar
