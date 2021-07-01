@@ -28,6 +28,14 @@ const numberMatch = {
     9: "9️⃣",
 };
 
+var express = require("express");
+var port = process.env.PORT || 4014;
+var app = express();
+app.get("/", function(req, res) {
+    res.send(JSON.stringify({ Hello: "World!!!!" }));
+});
+app.listen(port, function() {});
+
 async function updateDayCountInProfile() {
     oauth.post(
         "https://api.twitter.com/1.1/account/update_profile.json",
@@ -77,14 +85,6 @@ function getdayCount(day) {
 
     return emojiDay;
 }
-
-var express = require("express");
-var port = process.env.PORT || 4014;
-var app = express();
-app.get("/", function(req, res) {
-    res.send(JSON.stringify({ Hello: "World!!!!" }));
-});
-app.listen(port, function() {});
 
 var postBody = {
     status: "",
