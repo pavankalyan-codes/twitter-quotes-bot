@@ -65,14 +65,17 @@ async function updateDayCountInProfile() {
 }
 
 function getdayCount(day) {
-    curr = day.split("-")[1];
+    let dayCount = "1";
+    let previousDayCount = day.split("-")[1];
+    if (previousDayCount) {
+        var result = "";
+        curr.split("").forEach(function(letter) {
+            if ("0123456789".includes(letter)) result = result + "" + letter;
+        });
+        dayCount = parseInt(result) + 1 + "";
+    }
 
-    var result = "";
-    curr.split("").forEach(function(letter) {
-        if ("0123456789".includes(letter)) result = result + "" + letter;
-    });
-    dayCount = parseInt(result) + 1 + "";
-    emojiDay = "";
+    let emojiDay = "";
 
     dayCount.split("").forEach(function(letter) {
         emojiDay += numberMatch[letter];
@@ -122,7 +125,7 @@ setInterval(async function() {
         let status = qt.text;
         let author = qt.author;
 
-        postBody.status = `${status}\n-${author} #Testing #100DaysOfCode #DevCommunity`;
+        postBody.status = `${status}\n-${author} #100DaysOfCode #DevCommunity`;
         oauth.post(
             "https://api.twitter.com/1.1/statuses/update.json",
             process.env.twitter_user_access_token,
