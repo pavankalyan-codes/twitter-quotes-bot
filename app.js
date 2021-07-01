@@ -92,8 +92,8 @@ setInterval(async function() {
     );
 
     if (
-        date.getHours() === 10 &&
-        date.getMinutes() === 55 &&
+        date.getHours() === 11 &&
+        date.getMinutes() === 11 &&
         date.getSeconds() == 0
     ) {
         let qt = await quote.getQuote();
@@ -114,8 +114,8 @@ setInterval(async function() {
         );
     }
     if (
-        date.getHours() === 22 &&
-        date.getMinutes() === 55 &&
+        date.getHours() === 23 &&
+        date.getMinutes() === 11 &&
         date.getSeconds() === 0
     ) {
         let qt = await quote.getQuote();
