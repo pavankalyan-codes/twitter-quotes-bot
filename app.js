@@ -1,4 +1,5 @@
 var OAuth = require("oauth");
+const quote = require("./quote");
 
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
@@ -13,8 +14,6 @@ var oauth = new OAuth.OAuth(
     null,
     "HMAC-SHA1"
 );
-const fetch = require("node-fetch");
-const url = "https://type.fit/api/quotes";
 const numberMatch = {
     0: "0️⃣",
     1: "1️⃣",
@@ -65,10 +64,6 @@ async function updateDayCountInProfile() {
     );
 }
 
-function getRandomIndex() {
-    return Math.floor(Math.random() * (1640 - 0) + 0);
-}
-
 function getdayCount(day) {
     curr = day.split("-")[1];
 
@@ -90,7 +85,7 @@ var postBody = {
     status: "",
 };
 
-setInterval(function() {
+setInterval(async function() {
     var date = new Date();
     console.log(
         date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
@@ -101,55 +96,42 @@ setInterval(function() {
         date.getMinutes() === 55 &&
         date.getSeconds() == 0
     ) {
-        let settings = { method: "Get" };
-
-        fetch(url, settings)
-            .then((res) => res.json())
-            .then((json) => {
-                let index = getRandomIndex();
-                console.log(index);
-                console.log(json);
-                let status = json[index].text;
-                let author = json[index].author;
-                postBody.status = `${status}\n-${author} #100DaysOfCode #DevCommunity`;
-                oauth.post(
-                    "https://api.twitter.com/1.1/statuses/update.json",
-                    process.env.twitter_user_access_token,
-                    process.env.twitter_user_secret,
-                    postBody,
-                    "", // post content type ?
-                    function(err, data, res) {
-                        if (err) {} else {
-                            updateDayCountInProfile();
-                        }
-                    }
-                );
-            });
+        let qt = await quote.getQuote();
+        let status = qt.text;
+        let author = qt.author;
+        postBody.status = `${status}\n-${author} #100DaysOfCode #DevCommunity`;
+        oauth.post(
+            "https://api.twitter.com/1.1/statuses/update.json",
+            process.env.twitter_user_access_token,
+            process.env.twitter_user_secret,
+            postBody,
+            "", // post content type ?
+            function(err, data, res) {
+                if (err) {} else {
+                    updateDayCountInProfile();
+                }
+            }
+        );
     }
     if (
         date.getHours() === 22 &&
         date.getMinutes() === 55 &&
-        date.getSeconds() == 0
+        date.getSeconds() === 0
     ) {
-        let settings = { method: "Get" };
+        let qt = await quote.getQuote();
+        let status = qt.text;
+        let author = qt.author;
 
-        fetch(url, settings)
-            .then((res) => res.json())
-            .then((json) => {
-                let index = getRandomIndex();
-                let status = json[index].text;
-                let author = json[index].author;
-                postBody.status = `${status}\n-${author} #100DaysOfCode #DevCommunity`;
-                oauth.post(
-                    "https://api.twitter.com/1.1/statuses/update.json",
-                    process.env.twitter_user_access_token,
-                    process.env.twitter_user_secret,
-                    postBody,
-                    "", // post content type
-                    function(err, data, res) {
-                        if (err) {} else {}
-                    }
-                );
-            });
+        postBody.status = `${status}\n-${author} #Testing #100DaysOfCode #DevCommunity`;
+        oauth.post(
+            "https://api.twitter.com/1.1/statuses/update.json",
+            process.env.twitter_user_access_token,
+            process.env.twitter_user_secret,
+            postBody,
+            "", // post content type
+            function(err, data, res) {
+                if (err) {} else {}
+            }
+        );
     }
 }, 1000);
