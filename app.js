@@ -30,10 +30,10 @@ const numberMatch = {
 var express = require("express");
 var port = process.env.PORT || 4014;
 var app = express();
-app.get("/", function(req, res) {
+app.get("/", function (req, res) {
     res.send(JSON.stringify({ Hello: "World!!!!" }));
 });
-app.listen(port, function() {});
+app.listen(port, function () { });
 
 async function updateDayCountInProfile() {
     oauth.post(
@@ -42,8 +42,9 @@ async function updateDayCountInProfile() {
         process.env.twitter_user_secret,
         postBody,
         "", // post content type ?
-        function(err, data, res) {
-            if (err) {} else {
+        function (err, data, res) {
+            if (err) { console.log(err); } else {
+                console.log(data);
                 currDay = JSON.parse(data).name;
 
                 updatedDay = getdayCount(currDay);
@@ -55,8 +56,8 @@ async function updateDayCountInProfile() {
                     process.env.twitter_user_access_token,
                     process.env.twitter_user_secret, { name: myname },
                     "", // post content type ?
-                    function(err, data, res) {
-                        if (err) {} else {}
+                    function (err, data, res) {
+                        if (err) { console.log("in innner" + err) } else { console.log("sucess!!"); }
                     }
                 );
             }
@@ -68,8 +69,8 @@ function getdayCount(day) {
     let dayCount = "1";
     let previousDayCount = day.split("-")[1];
     if (previousDayCount) {
-        var result = "";
-        curr.split("").forEach(function(letter) {
+        let result = "";
+        previousDayCount.split("").forEach(function (letter) {
             if ("0123456789".includes(letter)) result = result + "" + letter;
         });
         dayCount = parseInt(result) + 1 + "";
@@ -77,7 +78,7 @@ function getdayCount(day) {
 
     let emojiDay = "";
 
-    dayCount.split("").forEach(function(letter) {
+    dayCount.split("").forEach(function (letter) {
         emojiDay += numberMatch[letter];
     });
 
@@ -88,7 +89,7 @@ var postBody = {
     status: "",
 };
 
-setInterval(async function() {
+setInterval(async function () {
     var date = new Date();
     console.log(
         date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
@@ -99,18 +100,22 @@ setInterval(async function() {
         date.getMinutes() === 11 &&
         date.getSeconds() == 0
     ) {
+        console.log("Posting");
         let qt = await quote.getQuote();
         let status = qt.text;
         let author = qt.author;
-        postBody.status = `${status}\n-${author} #100DaysOfCode #DevCommunity`;
+        console.log(status);
+        console.log(author);
+        postBody.status = `${status}\n-${author} #Testing #100DaysOfCode #DevCommunity`;
         oauth.post(
             "https://api.twitter.com/1.1/statuses/update.json",
             process.env.twitter_user_access_token,
             process.env.twitter_user_secret,
             postBody,
             "", // post content type ?
-            function(err, data, res) {
-                if (err) {} else {
+            function (err, data, res) {
+                if (err) { console.log(err); } else {
+                    console.log("updating profile");
                     updateDayCountInProfile();
                 }
             }
@@ -132,8 +137,8 @@ setInterval(async function() {
             process.env.twitter_user_secret,
             postBody,
             "", // post content type
-            function(err, data, res) {
-                if (err) {} else {}
+            function (err, data, res) {
+                if (err) { } else { }
             }
         );
     }
