@@ -97,8 +97,8 @@ setInterval(async function () {
 
     if (
         date.getHours() === 11 &&
-        date.getMinutes() === 11 &&
-        date.getSeconds() == 0
+        date.getMinutes() === 59 &&
+        date.getSeconds() == 10
     ) {
         console.log("Posting");
         let qt = await quote.getQuote();
@@ -106,7 +106,7 @@ setInterval(async function () {
         let author = qt.author;
         console.log(status);
         console.log(author);
-        postBody.status = `${status}\n-${author} #Testing #100DaysOfCode #DevCommunity`;
+        postBody.status = `${status}\n-${author} #100DaysOfCode #DevCommunity`;
         oauth.post(
             "https://api.twitter.com/1.1/statuses/update.json",
             process.env.twitter_user_access_token,
