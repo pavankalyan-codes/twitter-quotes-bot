@@ -97,8 +97,8 @@ setInterval(async function () {
 
     if (
         date.getHours() === 11 &&
-        date.getMinutes() === 59 &&
-        date.getSeconds() == 10
+        date.getMinutes() === 11 &&
+        date.getSeconds() == 0
     ) {
         console.log("Posting");
         let qt = await quote.getQuote();
